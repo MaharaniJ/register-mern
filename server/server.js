@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const RegisterModel = require('./model/registerSchema');
+require('dotenv').config();
 
 const app = express();
 app.use(cors({
@@ -10,7 +11,7 @@ app.use(cors({
   credentials: true
 }));
 
-mongoose.connect('mongodb+srv://jeyamaha98:jeyamaha@cluster0.r9yfyga.mongodb.net/Register', {
+mongoose.connect(process.env.DB, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
