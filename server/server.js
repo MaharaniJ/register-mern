@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
   res.json('Hello');
 });
 
-app.post('/register', (req, res) => {
+app.post('/signup', (req, res) => {
   const { name, email, password } = req.body;
   RegisterModel.findOne({ email: email })
     .then(user => {
@@ -42,6 +42,20 @@ app.post('/register', (req, res) => {
     })
     .catch(err => res.json(err));
 });
+
+app.use('/login', (req, res) => {
+  const {email, password} = req.body;
+  RegisterModel.findOne({ email: email, password: password})
+    .then(user=>{
+      if(user.password === password){
+          res.json('successfully logged in')
+      }
+      else{
+        res.json('failed to login')
+      }
+    })
+    .catch(err => res.json(err))
+})
 
 const PORT = 5000;
 app.listen(PORT, () => {

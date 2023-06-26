@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 
-function Register() {
+function SignUp() {
+  const navigate = useNavigate()
   const [value, setValue] = useState({
     name: '',
     email: '',
@@ -14,7 +16,7 @@ function Register() {
     e.preventDefault();
 
     axios
-      .post('http://localhost:5000/register', value)
+      .post('http://localhost:5000/signup', value)
       .then((res) => {
         console.log(res);
         // Reset the input fields after successful registration
@@ -23,6 +25,7 @@ function Register() {
           email: '',
           password: ''
         });
+        navigate('/')
       })
       .catch((err) => {
         console.log(err);
@@ -32,19 +35,15 @@ function Register() {
   return (
     <div className="d-flex justify-content-center align-items-center bg-primary vh-100">
       <div className="bg-white p-3 rounded w-25">
-        <h2>Register</h2>
+        <h2>SignUp</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="name">
-              <strong>Name</strong>
+          <div className='mb-3'>
+            <label htmlFor='name'>
+                <strong>Name</strong>
             </label>
-            <input
-              type="text"
-              name="name"
-              value={value.name}
-              onChange={(e) => setValue({ ...value, name: e.target.value })}
-              className="form-control rounded-0"
-            />
+            <input type='text' name='name'
+            onChange={(e)=>setValue(e.target.value)}
+              className='form-control rounded-0'></input>
           </div>
           <div className="mb-3">
             <label htmlFor="email">
@@ -71,16 +70,16 @@ function Register() {
             />
           </div>
           <button type="submit" className="btn btn-success mb-3">
-            Register
+            SignUp
           </button>
           <p>Already have an account?</p>
-          <button type="submit" className="btn btn-primary mb-3">
+          <Link to='/login' className="btn btn-primary mb-3">
             Login
-          </button>
+          </Link>
         </form>
       </div>
     </div>
   );
 }
 
-export default Register;
+export default SignUp;

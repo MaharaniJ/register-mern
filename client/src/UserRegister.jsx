@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function Register() {
   const nameRef = useRef();
@@ -75,9 +76,9 @@ function Register() {
             Register
           </button>
           <p>Already have an account?</p>
-          <button type="submit" className="btn btn-primary mb-3">
+          <Link to='/login' className="btn btn-primary mb-3">
             Login
-          </button>
+          </Link>
         </form>
       </div>
     </div>
