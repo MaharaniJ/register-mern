@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const RegisterModel = require('./model/registerSchema');
 require('dotenv').config();
+const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:3000', // Use "http" instead of "https" for local development
+  origin: 'http://localhost:3002', // Use "http" instead of "https" for local development
   methods: ['POST', 'GET'],
   credentials: true
 }));
@@ -29,35 +30,38 @@ app.get('/', (req, res) => {
 });
 
 app.post('/signup', (req, res) => {
-  const { name, email, password } = req.body;
-  RegisterModel.findOne({ email: email })
-    .then(user => {
-      if (user) {
-        res.json('Already registered');
-      } else {
-        RegisterModel.create({ name: name, email: email, password: password })
-          .then(result => res.json(result))
-          .catch(err => res.json(err));
-      }
-    })
-    .catch(err => res.json(err));
-});
+  const {name,email,password} = req.body;
+  bcrypt.hash(password, 10)
+  .then((hash)=>{
+    RegisterModel.create({name, email, password:hash})
+    .then((user)=>res.json(user))
+    .catch((error)=>res.json(error))
 
-app.use('/login', (req, res) => {
-  const {email, password} = req.body;
-  RegisterModel.findOne({ email: email, password: password})
-    .then(user=>{
-      if(user.password === password){
-          res.json('successfully logged in')
-      }
-      else{
-        res.json('failed to login')
-      }
-    })
-    .catch(err => res.json(err))
+  })
+  .catch((error)=>res.json(error.message))
 })
 
-const PORT = 5000;
+app.post('/login', (req, res) => {
+  const {email,password} = req.body
+  RegisterModel.findOne({email: email})
+  .then(user=>{
+    bcrypt.compare(password, user.password,(err,result)=>{
+      if(result){
+        res.json("success");
+      } else {
+        res.json("password is incorrect");
+      }
+    } )
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json("Internal Server Error");
+  });
+})
+
+
+
+const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });

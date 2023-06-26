@@ -16,7 +16,7 @@ function Login() {
     };
 
     axios
-      .post('http://localhost:5000/login', data)
+      .post('http://localhost:3001/login', data)
       .then((res) => {
         console.log(res);
         if (res.data === 'success') {

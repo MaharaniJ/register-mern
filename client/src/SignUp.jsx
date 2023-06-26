@@ -16,7 +16,7 @@ function SignUp() {
     e.preventDefault();
 
     axios
-      .post('http://localhost:5000/signup', value)
+      .post('http://localhost:3001/signup', value)
       .then((res) => {
         console.log(res);
         // Reset the input fields after successful registration
@@ -41,9 +41,14 @@ function SignUp() {
             <label htmlFor='name'>
                 <strong>Name</strong>
             </label>
-            <input type='text' name='name'
-            onChange={(e)=>setValue(e.target.value)}
-              className='form-control rounded-0'></input>
+            <input
+                type="text"
+                name="name"
+                value={value.name}
+                onChange={(e) => setValue({ ...value, name: e.target.value })}
+                className="form-control rounded-0"
+              />
+ 
           </div>
           <div className="mb-3">
             <label htmlFor="email">

@@ -1,0 +1,30 @@
+without hashed password the code for signup and login
+
+app.post('/signup', (req, res) => {
+  const { name, email, password } = req.body;
+  RegisterModel.findOne({ email: email })
+    .then(user => {
+      if (user) {
+        res.json('Already registered');
+      } else {
+        RegisterModel.create({ name: name, email: email, password: password })
+          .then(result => res.json(result))
+          .catch(err => res.json(err));
+      }
+    })
+    .catch(err => res.json(err));
+});
+
+app.post('/login', (req, res) => {
+  const {email, password} = req.body;
+  RegisterModel.findOne({ email: email, password: password})
+    .then(user=>{
+      if(user.password === password){
+          res.json('successfully logged in')
+      }
+      else{
+        res.json('failed to login')
+      }
+    })
+    .catch(err => res.json(err))
+})
